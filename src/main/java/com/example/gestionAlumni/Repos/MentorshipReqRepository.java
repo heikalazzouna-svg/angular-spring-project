@@ -12,7 +12,9 @@ public interface MentorshipReqRepository extends JpaRepository<MentorshipRequest
 
     List<MentorshipRequest> findByProposer_Id(Long alumniId);
 
-    List<MentorshipRequest> findByStatus(boolean status);
+    List<MentorshipRequest> findByStudent_Id(Long studentId);
+
+    List<MentorshipRequest> findByStatus(String status);
 
     @Query("SELECT m FROM MentorshipRequest m WHERE m.generatedOffer IS NOT NULL")
     List<MentorshipRequest> findWithGeneratedOffers();

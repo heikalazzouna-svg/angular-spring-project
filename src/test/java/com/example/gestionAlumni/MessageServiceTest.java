@@ -17,7 +17,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import org.apache.log4j.Logger; // 🔴 Logger ajouté ici
+import org.apache.log4j.Logger; //  Logger ajouté ici
 
 import java.util.Optional;
 

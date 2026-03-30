@@ -31,11 +31,15 @@ public class User {
     @Column(nullable = false, unique = true)
     String email;
 
+    @com.fasterxml.jackson.annotation.JsonProperty(access = com.fasterxml.jackson.annotation.JsonProperty.Access.WRITE_ONLY)
     @Column(nullable = false)
     String password;
 
     @Column(columnDefinition = "boolean default true")
     boolean active=true;
+
+    @Column(name = "graduation_year")
+    Integer graduationYear;
 @JsonIgnore
     @OneToMany(mappedBy = "receiver")
     List<Message> ReceivedMessages;
@@ -43,9 +47,11 @@ public class User {
     @OneToMany(mappedBy = "sender")
     List<Message> SentMessages;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "host")
     List<Event> hostedEvents;
 
+    @JsonIgnore
     @ManyToMany
     List<Event> events;
 

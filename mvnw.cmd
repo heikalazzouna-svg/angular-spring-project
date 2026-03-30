@@ -44,7 +44,7 @@
 @echo Cannot start maven from wrapper >&2 && exit /b 1
 @GOTO :EOF
 : end batch / begin powershell #>
-
+set JAVA_HOME=C:\Users\LENOVO\Desktop\jdk-17.0.12
 $ErrorActionPreference = "Stop"
 if ($env:MVNW_VERBOSE -eq "true") {
   $VerbosePreference = "Continue"

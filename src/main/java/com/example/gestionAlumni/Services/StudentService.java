@@ -25,7 +25,7 @@ public class StudentService {
                 .orElseThrow(() -> new RuntimeException("Invalid email"));
 
         if (!passwordEncoder.matches(rawPassword, student.getPassword())) {
-            throw new RuntimeException("Invalid alumni credentials");
+            throw new RuntimeException("Invalid student credentials");
         }
 
         return student;
@@ -55,16 +55,49 @@ public class StudentService {
             // Nom du fichier à stocker dans la base de données
             String documentName = document.getOriginalFilename();
 
-            // Ici, tu peux sauvegarder le fichier sur ton disque ou dans un service de stockage
-            // Exemple de sauvegarde du nom du fichier
+            try {
+                student.setDocument(document.getBytes());
+            } catch (java.io.IOException e) {
+                throw new RuntimeException("Failed to read document", e);
+            }
             student.setDocumentName(documentName);
 
-            // Si tu veux transférer le fichier physiquement, tu peux décommenter cette ligne :
-            // String filePath = "path/to/storage/" + documentName;
-            // document.transferTo(new File(filePath));
         }
 
         // 4. Sauvegarder l'étudiant mis à jour dans la base de données
+        return studentRepository.save(student);
+    }
+
+    public Student uploadResume(Long id, MultipartFile file) {
+        Student student = studentRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Student not found"));
+
+        if (file != null && !file.isEmpty()) {
+            try {
+                student.setDocument(file.getBytes());
+                student.setDocumentName(file.getOriginalFilename());
+            } catch (java.io.IOException e) {
+                throw new RuntimeException("Failed to read file", e);
+            }
+        }
+
+        return studentRepository.save(student);
+    }
+    public Student updateProfile(Long id, Student updatedData) {
+        Student student = studentRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Student not found"));
+        
+        if (updatedData.getFirstName() != null) student.setFirstName(updatedData.getFirstName());
+        if (updatedData.getLastName() != null) student.setLastName(updatedData.getLastName());
+        if (updatedData.getSpeciality() != null) student.setSpeciality(updatedData.getSpeciality());
+        if (updatedData.getPredictedGradYear() != 0) student.setPredictedGradYear(updatedData.getPredictedGradYear());
+        if (updatedData.getSearchType() != null) student.setSearchType(updatedData.getSearchType());
+        if (updatedData.getSkills() != null) student.setSkills(updatedData.getSkills());
+        if (updatedData.getExperiences() != null) student.setExperiences(updatedData.getExperiences());
+        if (updatedData.getProjects() != null) student.setProjects(updatedData.getProjects());
+        if (updatedData.getInterests() != null) student.setInterests(updatedData.getInterests());
+        if (updatedData.getAvailability() != null) student.setAvailability(updatedData.getAvailability());
+        
         return studentRepository.save(student);
     }
 }

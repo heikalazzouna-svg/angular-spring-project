@@ -8,16 +8,16 @@ import lombok.experimental.FieldDefaults;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
+@DiscriminatorValue("alumni")
 public class Alumni extends User{
-
-    @Column(nullable = false)
-    int graduationYear;
 
     String currentCompany;
 
@@ -28,23 +28,49 @@ public class Alumni extends User{
     String speciality;
 
     boolean verified=false;
+    boolean openToMentoring;
+    boolean willingToRefer;
+    boolean openToCareerAdvice;
+    
+    String academicPath;
+    String professionalPath;
+    String expertise;
+
+    @ElementCollection
+    List<String> skills;
+
+    String sector;
+    String availabilityDetails;
+
+    @Transient
+    Double rating; // For displaying computed rating from evaluations
+
+    @Lob
+    @Column(name = "document", columnDefinition = "LONGBLOB")
+    byte[] document;
+
+    String documentName;
+
+    @OneToMany(mappedBy = "alumni", cascade = CascadeType.ALL)
+    List<Experience> experiences;
 
     String verificationToken;
 
+    @JsonIgnore
     @OneToMany
     List<Application> applications;
 
+    @JsonIgnore
     @OneToMany
     List<MentorshipRequest> mentorshipRequests;
 
+    @JsonIgnore
     @OneToMany
     List<InternshipRequest> internshipRequestsReceived;
-
-    void acceptInternship(Long id){
-        for (InternshipRequest intern : internshipRequestsReceived){
-
-        }
-    }
+    
+    @JsonIgnore
+    @OneToMany(mappedBy = "creator")
+    List<Offer> offers;
 
     public void setVerificationToken(String verificationToken) {
         this.verificationToken = verificationToken;
@@ -62,7 +88,7 @@ public class Alumni extends User{
         return super.getPassword();
     }
     public boolean isVerified() {
-        return super.isActive();
+        return this.verified;
     }
 
     public boolean isActive() {

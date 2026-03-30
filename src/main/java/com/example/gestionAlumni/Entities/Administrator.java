@@ -3,7 +3,6 @@ package com.example.gestionAlumni.Entities;
 
 
 
-import com.example.gestionAlumni.Services.EmailService;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -14,6 +13,7 @@ import java.util.*;
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
+@DiscriminatorValue("admin")
 public class Administrator extends User {
     @ManyToMany
     @JoinTable(
@@ -53,8 +53,8 @@ public class Administrator extends User {
         String verificationLink = baseUrl + "/verify-account?token=" + token;
         String body = "Click the link below to verify your account:\n" + verificationLink;
 
-        // Use JavaMail or a service like SendGrid to send the email
-        EmailService.sendEmail(alumniEmail, subject, body);
+        // Email sending should be handled in a Spring service layer, not in JPA entities.
+        // This method currently builds the verification content only.
     }
 
 }

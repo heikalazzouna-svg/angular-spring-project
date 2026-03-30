@@ -3,6 +3,8 @@ package com.example.gestionAlumni.Entities;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,7 +20,7 @@ public class Offer {
 
     private String title;
     private String description;
-    private Boolean status;
+  
 
     @OneToOne
     @JoinColumn(name = "mentorship_request_id")
@@ -30,4 +32,20 @@ public class Offer {
     public void prePersist() {
         createdAt = LocalDateTime.now();
     }
+    private String type; // "internship" or "job"
+    private String duration;
+    private String company;
+    private String position;
+    private Long proposedSalary;
+
+   
+
+    private Boolean status = true;
+
+    
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User creator;
+
+   
 }
