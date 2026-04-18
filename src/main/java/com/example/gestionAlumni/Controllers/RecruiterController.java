@@ -14,9 +14,23 @@ public class RecruiterController {
 
     private final RecruiterService recruiterService;
 
+    @GetMapping("/verify-account")
+    public ResponseEntity<String> verifyAccount(@RequestParam String token) {
+        try {
+            recruiterService.verifyRecruiter(token);
+            return ResponseEntity.ok("Account verified successfully!");
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
     @PostMapping("/signup")
-    public ResponseEntity<Recruiter> signup(@RequestBody Recruiter recruiter) {
-        return ResponseEntity.ok(recruiterService.signup(recruiter));
+    public ResponseEntity<?> signup(@RequestBody Recruiter recruiter) {
+        try {
+            return ResponseEntity.ok(recruiterService.signup(recruiter));
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @PostMapping("/login")

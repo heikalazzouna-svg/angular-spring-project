@@ -103,7 +103,8 @@ public class AdminService {
                 a.getEmail(),
                 a.getGraduationYear(),
                 a.getSpeciality(),
-                a.isVerified()
+                a.isVerified(),
+                a.getAvatarUrl()
         );
     }
 
@@ -114,7 +115,8 @@ public class AdminService {
                 s.getLastName(),
                 s.getEmail(),
                 s.getSpeciality(),
-                s.getPredictedGradYear()
+                s.getPredictedGradYear(),
+                s.getAvatarUrl()
         );
     }
 }

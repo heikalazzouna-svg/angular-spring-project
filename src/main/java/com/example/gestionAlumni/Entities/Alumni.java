@@ -27,7 +27,6 @@ public class Alumni extends User{
 
     String speciality;
 
-    boolean verified=false;
     boolean openToMentoring;
     boolean willingToRefer;
     boolean openToCareerAdvice;
@@ -54,7 +53,7 @@ public class Alumni extends User{
     @OneToMany(mappedBy = "alumni", cascade = CascadeType.ALL)
     List<Experience> experiences;
 
-    String verificationToken;
+
 
     @JsonIgnore
     @OneToMany
@@ -72,28 +71,7 @@ public class Alumni extends User{
     @OneToMany(mappedBy = "creator")
     List<Offer> offers;
 
-    public void setVerificationToken(String verificationToken) {
-        this.verificationToken = verificationToken;
-    }
 
-    public String getEmail() {
-        return super.getEmail();
-    }
-
-    public void setVerified(boolean verified) {
-        this.verified = verified;
-    }
-
-    public String getPassword() {
-        return super.getPassword();
-    }
-    public boolean isVerified() {
-        return this.verified;
-    }
-
-    public boolean isActive() {
-        return super.isActive();
-    }
 
 
 }

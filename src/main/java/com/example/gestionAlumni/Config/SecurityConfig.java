@@ -26,6 +26,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/mentorship/**").permitAll()
                 .requestMatchers("/api/experience/**").permitAll()
                 .requestMatchers("/api/events/**").permitAll()
+                .requestMatchers("/api/users/**").permitAll()
                 .requestMatchers("/api/seed/**").permitAll()
                 .requestMatchers("/ws/**").permitAll()
                 .requestMatchers("/error").permitAll()

@@ -10,7 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/admin")
@@ -26,7 +28,16 @@ public class AdminController {
                     loginRequest.getEmail(),
                     loginRequest.getPassword()
             );
-            return ResponseEntity.ok(admin);
+            // Return a clean DTO to avoid recursive serialization of entity relationships
+            Map<String, Object> response = new HashMap<>();
+            response.put("id", admin.getId());
+            response.put("firstName", admin.getFirstName());
+            response.put("lastName", admin.getLastName());
+            response.put("email", admin.getEmail());
+            response.put("active", admin.isActive());
+            response.put("avatarUrl", admin.getAvatarUrl());
+            response.put("role", "admin");
+            return ResponseEntity.ok(response);
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

@@ -33,10 +33,15 @@ public class AlumniService {
         }
 
         alumni.setPassword(passwordEncoder.encode(alumni.getPassword()));
-        alumni.setVerified(false); // Waiting for admin approval
-        alumni.setVerificationToken(null); // No token needed anymore
+        
+        String token = UUID.randomUUID().toString();
+        alumni.setVerificationToken(token);
+        alumni.setVerified(false);
 
-        return alumniRepository.save(alumni);
+        Alumni savedAlumni = alumniRepository.save(alumni);
+        emailService.sendVerificationEmail(savedAlumni.getEmail(), savedAlumni.getFirstName(), token, "alumni");
+        
+        return savedAlumni;
     }
 
     // Login: Allow only verified alumni

@@ -20,6 +20,16 @@ public class StudentController {
     @Autowired
     private StudentService studentService;
 
+    @GetMapping("/verify-account")
+    public ResponseEntity<String> verifyAccount(@RequestParam String token) {
+        try {
+            studentService.verifyStudent(token);
+            return ResponseEntity.ok("Account verified successfully!");
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
         try {
@@ -34,8 +44,12 @@ public class StudentController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<Student> signup(@RequestBody Student student) {
-        return ResponseEntity.ok(studentService.signup(student));
+    public ResponseEntity<?> signup(@RequestBody Student student) {
+        try {
+            return ResponseEntity.ok(studentService.signup(student));
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @PutMapping("/{id}/complete-profile")

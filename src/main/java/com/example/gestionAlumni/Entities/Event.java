@@ -83,12 +83,12 @@ public class Event {
         joinColumns = @JoinColumn(name = "event_id"),
         inverseJoinColumns = @JoinColumn(name = "user_id")
     )
-    @JsonIgnoreProperties({"sentMessages", "ReceivedMessages", "password"})
+    @JsonIgnoreProperties({"sentMessages", "receivedMessages", "password"})
     private List<User> participants = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "admin_id")
-    @JsonIgnoreProperties({"sentMessages", "ReceivedMessages", "password"})
+    @JsonIgnoreProperties({"sentMessages", "receivedMessages", "password"})
     private Administrator admin;
 
     @JsonIgnore

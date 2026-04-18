@@ -24,6 +24,7 @@ public class Student extends User{
 
     int predictedGradYear;
     
+    @JsonIgnore
     @Lob
     private byte[] document;
 

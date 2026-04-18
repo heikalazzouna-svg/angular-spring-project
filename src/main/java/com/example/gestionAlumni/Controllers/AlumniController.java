@@ -39,9 +39,13 @@ public class AlumniController {
 
     // Signup: Now automatically sends verification email
     @PostMapping("/signup")
-    public ResponseEntity<Alumni> signup(@RequestBody Alumni alumni) {
-        Alumni savedAlumni = alumniService.signup(alumni);
-        return ResponseEntity.ok(savedAlumni);
+    public ResponseEntity<?> signup(@RequestBody Alumni alumni) {
+        try {
+            Alumni savedAlumni = alumniService.signup(alumni);
+            return ResponseEntity.ok(savedAlumni);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     // Login: Rejects unverified alumni

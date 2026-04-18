@@ -14,4 +14,5 @@ public class StudentAdminSummaryDTO {
     private String email;
     private String speciality;
     private Integer predictedGradYear;
+    private String avatarUrl;
 }

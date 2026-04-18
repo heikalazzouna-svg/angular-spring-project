@@ -237,6 +237,7 @@ public class DataSeeder implements CommandLineRunner {
                     student.setEmail("test@student.com");
                     student.setPassword(passwordEncoder.encode("password123"));
                     student.setActive(true);
+                    student.setVerified(true);
                     student.setGraduationYear(2025);
                     student.setAverage(15.5f);
                     student.setSpeciality("Software Engineering");

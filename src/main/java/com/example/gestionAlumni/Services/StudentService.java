@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import java.util.UUID;
 
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Service
@@ -19,6 +20,9 @@ public class StudentService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private EmailService emailService;
+
     // Méthode pour authentifier un étudiant
     public Student authenticate(String email, String rawPassword) {
         Student student = studentRepository.findByEmail(email)
@@ -26,6 +30,10 @@ public class StudentService {
 
         if (!passwordEncoder.matches(rawPassword, student.getPassword())) {
             throw new RuntimeException("Invalid student credentials");
+        }
+
+        if (!student.isVerified()) {
+            throw new RuntimeException("Account not verified. Check your email.");
         }
 
         return student;
@@ -37,6 +45,23 @@ public class StudentService {
             throw new RuntimeException("Email already in use");
         }
         student.setPassword(passwordEncoder.encode(student.getPassword()));
+        
+        String token = UUID.randomUUID().toString();
+        student.setVerificationToken(token);
+        student.setVerified(false);
+        
+        Student savedStudent = studentRepository.save(student);
+        emailService.sendVerificationEmail(savedStudent.getEmail(), savedStudent.getFirstName(), token, "student");
+        
+        return savedStudent;
+    }
+
+    public Student verifyStudent(String token) {
+        Student student = studentRepository.findByVerificationToken(token)
+                .orElseThrow(() -> new RuntimeException("Invalid token"));
+
+        student.setVerified(true);
+        student.setVerificationToken(null);
         return studentRepository.save(student);
     }
 

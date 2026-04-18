@@ -9,12 +9,15 @@ import lombok.experimental.FieldDefaults;
 
 import java.util.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
 @DiscriminatorValue("admin")
 public class Administrator extends User {
+    @JsonIgnore
     @ManyToMany
     @JoinTable(
             name = "admin_unverified_alumni",

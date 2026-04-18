@@ -15,4 +15,5 @@ public class AlumniAdminSummaryDTO {
     private Integer graduationYear;
     private String speciality;
     private boolean verified;
+    private String avatarUrl;
 }

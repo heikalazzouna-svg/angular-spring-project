@@ -36,16 +36,24 @@ public class User {
     String password;
 
     @Column(columnDefinition = "boolean default true")
-    boolean active=true;
+    Boolean active = true;
+
+    @Column(columnDefinition = "boolean default false")
+    Boolean verified = false;
+
+    String verificationToken;
+
+    String avatarUrl;
 
     @Column(name = "graduation_year")
     Integer graduationYear;
-@JsonIgnore
+    @JsonIgnore
     @OneToMany(mappedBy = "receiver")
-    List<Message> ReceivedMessages;
-@JsonIgnore
+    List<Message> receivedMessages;
+
+    @JsonIgnore
     @OneToMany(mappedBy = "sender")
-    List<Message> SentMessages;
+    List<Message> sentMessages;
 
     @JsonIgnore
     @OneToMany(mappedBy = "host")
@@ -64,7 +72,19 @@ public class User {
     }
 
     public boolean isActive() {
-        return active;
+        return active != null && active;
+    }
+
+    public boolean isVerified() {
+        return verified != null && verified;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public void setVerified(boolean verified) {
+        this.verified = verified;
     }
 
     public Long getId() {

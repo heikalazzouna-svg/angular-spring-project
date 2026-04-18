@@ -9,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -17,14 +18,22 @@ public class RecruiterService {
 
     RecruiterRepository recruiterRepository;
     PasswordEncoder passwordEncoder;
+    EmailService emailService;
 
     public Recruiter signup(Recruiter recruiter) {
         if (recruiterRepository.findByEmail(recruiter.getEmail()).isPresent()) {
             throw new RuntimeException("Email already in use");
         }
         recruiter.setPassword(passwordEncoder.encode(recruiter.getPassword()));
+        
+        String token = UUID.randomUUID().toString();
+        recruiter.setVerificationToken(token);
+        recruiter.setVerified(false);
         recruiter.setActive(true); // Recruiters are active by default for now
-        return recruiterRepository.save(recruiter);
+
+        Recruiter savedRecruiter = recruiterRepository.save(recruiter);
+        emailService.sendVerificationEmail(savedRecruiter.getEmail(), savedRecruiter.getFirstName(), token, "recruiter");
+        return savedRecruiter;
     }
 
     public Recruiter authenticate(String email, String rawPassword) {
@@ -35,11 +44,24 @@ public class RecruiterService {
             throw new RuntimeException("Invalid credentials");
         }
 
+        if (!recruiter.isVerified()) {
+            throw new RuntimeException("Account not verified. Check your email.");
+        }
+
         if (!recruiter.isActive()) {
             throw new RuntimeException("Account is not active.");
         }
 
         return recruiter;
+    }
+
+    public Recruiter verifyRecruiter(String token) {
+        Recruiter recruiter = recruiterRepository.findByVerificationToken(token)
+                .orElseThrow(() -> new RuntimeException("Invalid token"));
+
+        recruiter.setVerified(true);
+        recruiter.setVerificationToken(null);
+        return recruiterRepository.save(recruiter);
     }
 
     public Recruiter updateProfile(Long id, Recruiter updatedData) {
