@@ -25,12 +25,12 @@ public class EmailService {
 
     public void sendVerificationEmail(String toEmail, String firstName, String token, String userType) {
         String verificationUrl = "http://localhost:4200/verify-email?token=" + token + "&type=" + userType;
-        String subject = "Vérifiez votre compte AlumniEngine";
+        String subject = "Vérifiez votre compte EduLink";
         String body = "Bonjour " + firstName + ",\n\n"
-                + "Merci d'avoir créé un compte sur AlumniEngine !\n"
+                + "Merci d'avoir créé un compte sur EduLink !\n"
                 + "Veuillez cliquer sur le lien ci-dessous pour vérifier votre adresse email et activer votre compte :\n\n"
                 + verificationUrl + "\n\n"
-                + "À très bientôt sur AlumniEngine !";
+                + "À très bientôt sur EduLink !";
         
         sendEmail(toEmail, subject, body);
     }
